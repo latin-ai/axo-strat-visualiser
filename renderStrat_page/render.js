@@ -92,14 +92,28 @@ function calculateProfits(stratUserFunds, stratTrades) {
         initialCNT = initialCNT + sell.amount
     })
 
+    let initialTotal = initialADA + (initialCNT * spotSpreadData.spot);
+    let currentTotal = currentADA + (currentCNT * spotSpreadData.spot);
+    let profitLoss = currentTotal - initialTotal;
+    let profitPercent = (profitLoss / initialTotal) * 100;  // Calculate profit percentage
+
+    // Agregar logging para depuración
+    console.log(`Initial ADA: ${initialADA}, Initial CNT: ${initialCNT}`);
+    console.log(`Current ADA: ${currentADA}, Current CNT: ${currentCNT}`);
+    console.log(`Initial Total: ${initialTotal}, Current Total: ${currentTotal}`);
+    console.log(`Profit Loss: ${profitLoss}, Profit Percentage: ${profitPercent}%`);
+
     const boughtCell = document.getElementById('Bought');
     boughtCell.innerHTML = `You entered: ${initialADA.toFixed(2)} ADA and ${initialCNT.toFixed(2)} ${nameCNT}`;
 
     const soldcell = document.getElementById('Sold');
-    soldcell.innerHTML =   `You now have: ${currentADA.toFixed(2)} ADA and ${currentCNT.toFixed(2)} ${nameCNT}`;
+    soldcell.innerHTML = `You now have: ${currentADA.toFixed(2)} ADA and ${currentCNT.toFixed(2)} ${nameCNT}`;
 
     const profitcell = document.getElementById('profitloss');
-    profitcell.innerHTML = `At the current prices:<br><br>if you had hold your asset you'd have:<br>${(initialADA + (initialCNT * spotSpreadData.spot)).toFixed(2)} ADA<br><br>instead your strat now holds a value of:<br>${(currentADA + (currentCNT * spotSpreadData.spot)).toFixed(2)} ADA<br><br>profit: ${((currentADA + (currentCNT * spotSpreadData.spot))-(initialADA + (initialCNT * spotSpreadData.spot))).toFixed(2)} ADA`;
+    profitcell.innerHTML = `At the current prices:<br><br>if you had held your asset you'd have:<br>${initialTotal.toFixed(2)} ADA<br><br>instead your strat now holds a value of:<br>${currentTotal.toFixed(2)} ADA<br><br>profit: ${profitLoss.toFixed(2)} ADA<br><br>Profit Percentage: ${profitPercent.toFixed(2)}%`;
+
+    // Asegurarse de que el Profit Percentage se escriba en la salida estándar
+    console.log(`Profit Percentage: ${profitPercent.toFixed(2)}%`);
 }
 
 render()
